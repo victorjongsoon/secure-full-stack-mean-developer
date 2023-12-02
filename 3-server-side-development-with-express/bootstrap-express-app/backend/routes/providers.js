@@ -15,9 +15,14 @@ router.get('/edit/:id', providersController.edit); // http://localhost:3000/prov
 router.post('/update/:id', providersController.update); // http://localhost:3000/providers/update/1
 
 /* GET edit page. */
-router.get('/add-provider', providersController.addform); 
+router.get('/add-provider', providersController.addform); // http://localhost:3000/providers/add-provider
 
 /* POST add page. */
-router.post('/add', providersController.add); 
+router.post('/add', providersController.add); // http://localhost:3000/providers/add
+
+/* GET delete page. */
+router.get('/delete/:id', providersController.delete); // http://localhost:3000/providers/delete/1
+
+
 
 module.exports = router;

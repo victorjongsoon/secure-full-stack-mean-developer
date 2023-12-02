@@ -77,5 +77,18 @@ module.exports.add = function (req, res) {
     }
     // Add new provider to providers array
     providers.push(provider); // Push provider object to providers array
-    res.render('providers/providers-update', { title: 'Update' }); // Render the providers-edit.hbs view
+    res.render('providers/providers-add', { title: 'Update' }); // Render the providers-edit.hbs view
+}
+
+// Delete a Provider
+module.exports.delete = function (req, res) {
+    let id = req.params.id; // Get id from request parameters
+    let provider = providers.find(provider => provider.id == id); // Find provider by id
+    let company = provider.company.company_name; // Get company from provider object
+    let idx = providers.indexOf(providers.find(provider => provider.id == id)); // Find index of provider in providers array
+    providers.splice(idx, 1); // Delete provider from providers array
+
+    res.render('providers/providers-delete', {title:
+            'Delete', company: company
+    });  
 }

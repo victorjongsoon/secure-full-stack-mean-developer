@@ -3,7 +3,7 @@
     <div class="container">
         <h2 class="text-center mt-0">At Your Service</h2>
         <hr class="divider my-4">
-        
+
         <!-- Add Provider Button -->
         <div class="row my-4">
             <div class="col-sm-12 text-right">
@@ -34,11 +34,37 @@
                         <td scope="row">
                             <a href="/providers/details/{{ id }}" class="btn btn-primary btn-sm">View</a>
                             <a href="/providers/edit/{{ id }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="/providers/delete/{{ id }}" method="POST" style="display: inline-block;">
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
+                            <a href="#myModal" class="btn btn-danger btn-sm" data-toggle="modal">Delete</a>
                         </td>
                     </tr>
+
+                    <!-- Source:  https://www.tutorialrepublic.com/ -->
+
+                    <!-- Modal Window - Confirmation -->
+                    <div id="myModal" class="modal fade">
+                        <div class="modal-dialog modal-confirm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <div class="icon-box">
+                                        <i class="material-icons">&#xE5CD;</i>
+                                    </div>
+                                    <h4 class="modal-title">Are you sure?</h4>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Do you really want to delete these records? This process cannot be undone.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-info btn-md"
+                                        data-dismiss="modal">Cancel</button>
+                                    <a href="/providers/delete/{{ id }}">
+                                        <button type="button" class="btn btn-danger">Delete</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {{/each}}
                 </tbody>
                 </thead>
