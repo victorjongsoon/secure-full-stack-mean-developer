@@ -22,4 +22,17 @@ router.delete('/providers/:id', mainController.deleteOne); // http://localhost:3
 //Delete All /api/providers
 router.delete('/providers', mainController.deleteAll); // http://localhost:3000/api/providers
 
+// If no matching route
+router.post('/*', notFound);
+router.get('/*', notFound);
+router.delete('/*', notFound);
+router.put('/*', notFound);
+
+function notFound(req, res) {
+    res.status(404);
+    res.send('Not valid route');
+    return; // Make sure to return after sending the response
+}
+
+
 module.exports = router;

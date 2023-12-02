@@ -10,7 +10,6 @@ function isEmptyList(obj) {
 
 // Handle Error
 function handleError(res, error) {
-    console.error(error); // Log the error for debugging
     res.status(500).send("Internal Server Error"); // Set 500 status for internal server error
 }
 
@@ -42,10 +41,10 @@ module.exports.create = function (req, res) {
     try {
         var provider = req.body; // get new provider from request body
         Provider.create(provider)
-        .then(result => {
-            res.status(201);
-            res.send(provider);
-        })
+            .then(result => {
+                res.status(201);
+                res.send(provider);
+            })
         /*
         if (isEmptyList(providers)) {
             providers = [];
@@ -122,7 +121,7 @@ module.exports.readOne = function (req, res) {
     try {
         let id = new ObjectId(req.params.id); // Get id from request parameters
 
-        Provider.find({'_id':id})
+        Provider.find({ '_id': id })
             .then(result => {
 
                 if (isEmptyList(result)) {
@@ -146,12 +145,25 @@ module.exports.readOne = function (req, res) {
 //PUT /api/providers/:id
 module.exports.update = function (req, res) {
 
-    if (isEmptyList(providers)) {
-        res.status = 404;
-        res.send("List is Empty. Cannot Update Provider");
+    try {
+        let id = new ObjectId(req.params.id); // Get id from request parameters
+        let provider = req.body;
+        Provider.findOneAndUpdate({ '_id': id }, provider, { new: true })
+            .then(result => {
+                if (isEmptyList(result)) {
+                    res.status(400);
+                    res.send("List is Empty. Cannot Update Provider");
+                }
+                res.status(200);
+                res.send(result);
+            }).catch(error => {
+                handleError(res, error);
+            });
+    } catch (error) {
+        handleError(res, error);
     }
 
-    let id = req.params.id; // Get id from request parameters
+    /*
     let provider = providers.find(provider => provider.id == id); // Find provider by id
 
     provider.firstname = req.body.firstname; // Update provider firstname
@@ -168,38 +180,56 @@ module.exports.update = function (req, res) {
     provider.company.email = req.body.company.email;
     provider.company.description = req.body.company.description;
     provider.company.tagline = req.body.company.tagline;
+    */
 
-    res.status(200);
-    res.send(provider);
 };
 
 //DELETE one /api/providers/:id
 module.exports.deleteOne = function (req, res) {
-
-    if (isEmptyList(providers)) {
-        res.status = 404;
-        res.send("List is Empty. Cannot Delete Provider");
+    try {
+        let id = new ObjectId(req.params.id); // Get id from request parameters
+        Provider.findOneAndDelete({ '_id': id })
+            .then(result => {
+                if (isEmptyList(result)) {
+                    res.status(404);
+                    res.send("List is Empty. Cannot Delete Provider");
+                }
+                res.status(200);
+                res.send(result);
+            }).catch(error => {
+                handleError(res, error);
+            });
+    } catch (error) {
+        handleError(res, error);
     }
 
-    let id = req.params.id; // Get id from request parameters
+
+    /*
+
     let provider = providers.find(provider => provider.id == id); // Find provider by id
     let idx = providers.indexOf(provider); // Find index of provider in providers array
     providers.splice(idx, 1); // Delete provider from providers array
+    */
 
-    res.status(200); // res.status(404); has been deleted
-    res.send(provider);
+
 };
 
 //DELETE all /api/providers
 module.exports.deleteAll = function (req, res) {
+    try{
+        Provider.deleteMany().then(result => {
+            if (result.deletedCount == 0) {
+                res.status(404);
+                res.send("List is Empty. Cannot Delete Provider");
+            }
 
-    if (isEmptyList(providers)) {
-        res.status = 404;
-        res.send("List is Empty. Cannot Delete Provider");
+            res.status(200);
+            res.send("All Providers Deleted")
+        }).catch(error => {
+            handleError(res, error);
+        });
+    } catch (error) {
+        handleError(res, error);
     }
-
-    providers = []; // Delete all providers from providers array
-    res.status(200);
-    res.send("All Providers Deleted")
 };
 
