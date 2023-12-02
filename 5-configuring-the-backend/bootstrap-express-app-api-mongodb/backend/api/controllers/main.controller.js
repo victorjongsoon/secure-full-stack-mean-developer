@@ -8,6 +8,12 @@ function isEmptyList(obj) {
     return (!obj || obj.length == 0 || Object.keys(obj).length == 0);
 }
 
+// Handle Error
+function handleError(res, error) {
+    console.error(error); // Log the error for debugging
+    res.status(500).send("Internal Server Error"); // Set 500 status for internal server error
+}
+
 // check for existing id
 /*
 function existsProviderId(id) {
@@ -33,25 +39,38 @@ function getUniqueId(providers) {
 
 //POST /api/providers
 module.exports.create = function (req, res) {
-    // generate random id
-    if (isEmptyList(providers)) {
-        providers = [];
+    try {
+        var provider = req.body; // get new provider from request body
+        Provider.create(provider)
+        .then(result => {
+            res.status(201);
+            res.send(provider);
+        })
+        /*
+        if (isEmptyList(providers)) {
+            providers = [];
+        }
+        */
+
+    } catch (error) {
+        handleError(res, error);
     }
 
+    /*
     var id = req.body.id;
     if (existsProviderId(id)) {
         res.status(400);
         res.send("Provider id already exists");
         id = getUniqueId(providers); // Generate unique id
     }
+    */
 
-    var provider = req.body; // get new provider from request body
-    provider.id = id; // Add id to provider object
+
+    // provider.id = id; // Add id to provider object
 
     // Add new provider to providers array
-    providers.push(provider); // Push provider object to providers array
-    res.status(200);
-    res.send(provider);
+    // providers.push(provider); // Push provider object to providers array
+
 
     /*
     Create new provider object
@@ -76,11 +95,7 @@ module.exports.create = function (req, res) {
     */
 };
 
-// Handle Error
-function handleError(res, error) {
-    console.error(error); // Log the error for debugging
-    res.status(500).send("Internal Server Error"); // Set 500 status for internal server error
-}
+
 
 //GET /api/providers
 module.exports.readAll = function (req, res) {
