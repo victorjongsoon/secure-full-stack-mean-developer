@@ -1,14 +1,54 @@
-const providers = require('../models/providers.models'); // Import providers model
+let providers = require('../models/providers.models'); // Import providers model
+
+// Util functions
+// Check if list is empty
+function isEmptyList(obj) {
+    return (!obj || obj.length == 0 || Object.keys(obj).length == 0); 
+}
+
+// check for existing id
+function existsProviderId(id) {
+    let provider = providers.find(provider => provider.id == id); // Find provider by id
+    return provider;
+}
+
+// generate a unique id
+function getUniqueId(providers) {
+    let min = 100000;
+    let max = 999999;
+    do {
+        var id =  Math.floor(Math.random() * (max - min + 1)) + min;
+    } while(existsProviderId(id));
+
+    return id;
+}
 
 // CRUD - Create (POST), Read (GET), Update (PUT), Delete (DELETE)
 
 //POST /api/providers
 module.exports.create = function(req, res) {
     // generate random id
-    let min = 100000;
-    let max = 999999;
-    let id = Math.floor(Math.random() * (max - min + 1)) + min;
-    // Create new provider object
+    if (isEmptyList(providers)) {
+        providers = [];
+    }
+
+    var id = req.body.id;
+    if (existsProviderId(id)) {
+        res.status(400);
+        res.send("Provider id already exists");
+        id = getUniqueId(providers); // Generate unique id
+    }
+
+    var provider = req.body; // get new provider from request body
+    provider.id = id; // Add id to provider object
+
+    // Add new provider to providers array
+    providers.push(provider); // Push provider object to providers array
+    res.status(200);
+    res.send(provider); 
+
+    /*
+    Create new provider object
     let provider = {
         id : id, // Add provider id
         firstname : req.body.firstname, // Add provider firstname
@@ -27,20 +67,28 @@ module.exports.create = function(req, res) {
             tagline: req.body.company.tagline, // Add provider company tagline
         }
     }
-    // Add new provider to providers array
-    providers.push(provider); // Push provider object to providers array
-    res.status(200);
-    res.send(provider); 
+    */
 };
 
 //GET /api/providers
 module.exports.readAll = function(req, res) {
+    if (isEmptyList(providers)) {
+        res.status = 404;
+        res.send("No Providers Found");
+    }
+
     res.status(200);
     res.send(providers);
 };
 
 //GET One /api/providers/:id
 module.exports.readOne = function(req, res) {
+
+    if(isEmptyList(providers)) {
+        res.status(404);
+        res.send("No Providers Found");
+    }
+
     let id = req.params.id; // Get id from request parameters
     let provider = providers.find(provider => provider.id == id); // Find provider by id
     res.status(200);
@@ -49,6 +97,12 @@ module.exports.readOne = function(req, res) {
 
 //PUT /api/providers/:id
 module.exports.update = function(req, res) {
+
+    if (isEmptyList(providers)) {
+        res.status = 404;
+        res.send("List is Empty. Cannot Update Provider");
+    }
+
     let id = req.params.id; // Get id from request parameters
     let provider = providers.find(provider => provider.id == id); // Find provider by id
     
@@ -73,6 +127,12 @@ module.exports.update = function(req, res) {
 
 //DELETE one /api/providers/:id
 module.exports.deleteOne = function(req, res) {
+
+    if (isEmptyList(providers)) {
+        res.status = 404;
+        res.send("List is Empty. Cannot Delete Provider");
+    }
+
     let id = req.params.id; // Get id from request parameters
     let provider = providers.find(provider => provider.id == id); // Find provider by id
     let idx = providers.indexOf(provider); // Find index of provider in providers array
@@ -84,6 +144,12 @@ module.exports.deleteOne = function(req, res) {
 
 //DELETE all /api/providers
 module.exports.deleteAll = function(req, res) {
+
+    if (isEmptyList(providers)) {
+        res.status = 404;
+        res.send("List is Empty. Cannot Delete Provider");
+    }
+
     providers = []; // Delete all providers from providers array
     res.status(200);
     res.send("All Providers Deleted")
