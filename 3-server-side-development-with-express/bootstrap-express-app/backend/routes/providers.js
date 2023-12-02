@@ -11,7 +11,13 @@ router.get('/details/:id', providersController.details); // http://localhost:300
 /* GET edit page. */
 router.get('/edit/:id', providersController.edit); // http://localhost:3000/providers/edit/1
 
-/* GET post page. */
+/* POST update page*/
 router.post('/update/:id', providersController.update); // http://localhost:3000/providers/update/1
+
+/* GET edit page. */
+router.get('/add-provider', providersController.addform); 
+
+/* POST add page. */
+router.post('/add', providersController.add); 
 
 module.exports = router;
