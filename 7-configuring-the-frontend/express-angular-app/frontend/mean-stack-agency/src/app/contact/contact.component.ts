@@ -8,8 +8,20 @@ import { NgForm } from '@angular/forms';
 })
 
 export class ContactComponent {
-  constructor() { }
+  constructor() {
+    this.firstname = '';
+    this.lastname = '';
+    this.phone = '';
+    this.message = '';
+  }
+  
   ngOnInit() { }
+
+  // Define properties for the form fields
+  firstname: string;
+  lastname: string;
+  phone: string;
+  message: string;
 
   handleSubmit(contactForm: NgForm){
     console.log(contactForm.value);

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProviderClass } from '../../models/provider.class';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { providers } from '../../models/providers.data';
 
 @Component({
@@ -12,11 +12,11 @@ export class AddProvidersComponent implements OnInit {
 
   constructor() {
     this.providersForm = new FormGroup({
-      firstname: new FormControl(),
+      firstname: new FormControl('', [Validators.required, Validators.minLength(3)]),
       lastname: new FormControl(),
       position: new FormControl(),
-      email: new FormControl(),
-      phone: new FormControl(),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      phone: new FormControl('', [Validators.required, Validators.pattern(/\+65(6|8|9)\d{7}/g)]),
       company_name: new FormControl(),
       address: new FormControl(),
       address2: new FormControl(),
@@ -70,6 +70,9 @@ export class AddProvidersComponent implements OnInit {
     providers.push(this.provider);
     this.submitted = true;
   }
+
+  // method to easy access form controls
+  get f() { return this.providersForm.controls; }
 }
 
 
