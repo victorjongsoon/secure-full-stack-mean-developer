@@ -7,7 +7,7 @@
         <!-- Add Provider Button -->
         <div class="row my-4">
             <div class="col-sm-12 text-right">
-                <a href="/providers/add-provider/" class="btn btn-primary btn-md">Add Provider</a>
+                <a routerLink="/providers/add-provider/" class="btn btn-primary btn-md" routerLinkActive="active">Add Provider</a>
             </div>
         </div>
 
@@ -32,8 +32,8 @@
                         <td scope="row">{{provider.position}}</td>
                         <td scope="row">{{provider.company.company_name}}</td>
                         <td scope="row">
-                            <a href="/providers/details/{{provider.id}}" class="btn btn-primary btn-sm mx-1">View</a>
-                            <a href="/providers/edit/{{provider.id}}" class="btn btn-warning btn-sm mx-1">Edit</a>
+                            <a routerLink="/providers/details/{{provider.id}}" class="btn btn-primary btn-sm mx-1">View</a>
+                            <a routerLink="/providers/edit/{{provider.id}}" class="btn btn-warning btn-sm mx-1">Edit</a>
                             <a href="#myModal{{provider.id}}" class="btn btn-danger btn-sm mx-1" data-toggle="modal">Delete</a>
                         </td>
                     </tr>
