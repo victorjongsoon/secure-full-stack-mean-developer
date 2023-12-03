@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule} from '@angular/forms';
 import {AboutModule} from './about/about.module';
+import { UserModule } from './user/user.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {AboutModule} from './about/about.module';
     AppRoutingModule,
     NgbModule,
     FormsModule,
-    AboutModule
+    AboutModule,
+    UserModule
   ],
   providers: [
     provideClientHydration()
