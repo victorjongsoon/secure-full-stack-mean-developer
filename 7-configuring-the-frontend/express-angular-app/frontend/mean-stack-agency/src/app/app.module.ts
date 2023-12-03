@@ -8,23 +8,22 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule} from '@angular/forms';
 import {AboutModule} from './about/about.module';
 import { UserModule } from './user/user.module';
-import { ProvidersComponent } from './providers/providers.component';
 import { ContactComponent } from './contact/contact.component';
 import { HomeComponent } from './home/home.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { NavComponent } from './nav/nav.component';
 import { FooterComponent } from './footer/footer.component';
+import {ProvidersModule} from './providers/providers.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ProvidersComponent,
     ContactComponent,
     HomeComponent,
     NotfoundComponent,
     NavComponent,
-    FooterComponent
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,7 +31,8 @@ import { FooterComponent } from './footer/footer.component';
     NgbModule,
     FormsModule,
     AboutModule,
-    UserModule
+    UserModule,
+    ProvidersModule
   ],
   providers: [
     provideClientHydration()
