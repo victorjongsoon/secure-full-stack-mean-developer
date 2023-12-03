@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProviderClass } from '../../models/provider.class';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { providers } from '../../models/providers.data';
+import { ProviderService } from '../../services/provider.service';
+import { error } from 'console';
 
 @Component({
   selector: 'app-add-providers',
@@ -10,7 +11,7 @@ import { providers } from '../../models/providers.data';
 })
 export class AddProvidersComponent implements OnInit {
 
-  constructor() {
+  constructor(private providerService: ProviderService) {
     this.providersForm = new FormGroup({
       firstname: new FormControl('', [Validators.required, Validators.minLength(3)]),
       lastname: new FormControl(),
@@ -27,29 +28,68 @@ export class AddProvidersComponent implements OnInit {
       tagline: new FormControl(),
     })
   }
-  
+
   submitted = false;
+  emailError = false;
+  emailErrorMessage = 'Email already exists';
+  providers: ProviderClass[] = []; // Initialize as an empty array
   provider = new ProviderClass();
   providersForm: FormGroup;
 
   ngOnInit(): void {
-
+    this.loadData();
   }
 
   handleSubmit() {
     console.log(this.providersForm.value);
     this.submitted = true;
+    this.buildProvider();
+
+    if (!this.isInvalidEmail()) {
+      this.providerService.addProvider(this.provider).subscribe({
+        next: (data) => {
+          this.submitted = true;
+          this.emailError = false;
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });      
+    }
+    this.submitted = false;
+  }
+
+  // Check for duplicate emails
+  isInvalidEmail() {
+    let email = this.providersForm.get('email')?.value;
+    if (this.providers.filter((provider) => provider.company.email === email).length > 0) {
+      this.emailError = true;
+      return true;
+    } else {
+      this.emailError = false;
+      return false;
+    }
+  }
+
+  // method to easy access form controls
+  get f() { return this.providersForm.controls; }
+
+  // Generate new ID
+  getNewId() {
     let newId: number;
 
     while (true) {
-      newId = Math.floor(Math.random() * 1000);
-      if (providers.findIndex((provider) => provider.id === newId) === -1) {
-        break;
+      newId = Math.floor(Math.random() * 1000 + 99999);
+      if (this.providers.findIndex((provider) => provider.id === newId) === -1) {
+        return newId;
       }
     };
+  }
 
+  // Build new provider object
+  buildProvider() {
     let p = this.providersForm.value;
-    this.provider.id = newId;
+    this.provider.id = this.getNewId();
     this.provider.firstname = p.firstname;
     this.provider.lastname = p.lastname;
     this.provider.position = p.position;
@@ -66,13 +106,17 @@ export class AddProvidersComponent implements OnInit {
       tagline: p.tagline,
       description: p.description,
     };
-
-    providers.push(this.provider);
-    this.submitted = true;
   }
 
-  // method to easy access form controls
-  get f() { return this.providersForm.controls; }
+  loadData(){
+    this.providerService.getAllProviders().subscribe((data: ProviderClass[]) => {
+      this.providers = data;
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+
 }
 
 

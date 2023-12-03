@@ -22,6 +22,7 @@ const CompanySchema = new Schema(
 // create provider schema (top-level document)
 const ProviderSchema = new Schema(
     {
+        "id": {type: Number, required: true, unique: true},
         "firstname": {type: String, required: true},
         "lastname": {type: String, required: true},
         "position": {type: String},
