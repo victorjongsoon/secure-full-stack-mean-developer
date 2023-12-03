@@ -9,6 +9,7 @@ import { ContactComponent } from './contact/contact.component';
 import { AboutComponent } from './about/about.component';
 import { AddProvidersComponent } from './providers/add-providers/add-providers.component';
 import { EditProvidersComponent } from './providers/edit-providers/edit-providers.component';
+import { DeleteProvidersComponent } from './providers/delete-providers/delete-providers.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: 'providers', component: ProvidersComponent},
   {path: 'providers/add', component: AddProvidersComponent},
   {path: 'providers/edit/:id', component: EditProvidersComponent},
+  {path: 'providers/delete/:id', component: DeleteProvidersComponent},
   {path: '**', component: NotfoundComponent},
 ];
 

@@ -127,11 +127,11 @@ module.exports.readOne = function (req, res) {
                 if (isEmptyList(result)) {
                     res.status(404);
                     res.send("No Providers Found");
-                }
-
+                } else {
                 // let provider = providers.find(provider => provider.id == id); // Find provider by id
                 res.status(200);
                 res.send(result);
+                }
             })
             .catch(error => {
                 handleError(res, error);
@@ -153,9 +153,10 @@ module.exports.update = function (req, res) {
                 if (isEmptyList(result)) {
                     res.status(400);
                     res.send("List is Empty. Cannot Update Provider");
+                } else {
+                    res.status(200);
+                    res.send(result);
                 }
-                res.status(200);
-                res.send(result);
             }).catch(error => {
                 handleError(res, error);
             });
@@ -193,9 +194,10 @@ module.exports.deleteOne = function (req, res) {
                 if (isEmptyList(result)) {
                     res.status(404);
                     res.send("List is Empty. Cannot Delete Provider");
+                } else {
+                    res.status(200);
+                    res.send(result);
                 }
-                res.status(200);
-                res.send(result);
             }).catch(error => {
                 handleError(res, error);
             });
@@ -221,10 +223,10 @@ module.exports.deleteAll = function (req, res) {
             if (result.deletedCount == 0) {
                 res.status(404);
                 res.send("List is Empty. Cannot Delete Provider");
+            } else {
+                res.status(200);
+                res.send("All Providers Deleted")
             }
-
-            res.status(200);
-            res.send("All Providers Deleted")
         }).catch(error => {
             handleError(res, error);
         });
