@@ -20,7 +20,7 @@
 ### 4. Create a new Provider
 ![add-provider](https://github.com/victorjongsoon/secure-full-stack-mean-developer/blob/master/3-server-side-development-with-express/bootstrap-express-app/img/provider-add-page.PNG)
 
-#### 4.1 Successfully Deleted
+#### 4.1 Successfully Added
 ![add-success](https://github.com/victorjongsoon/secure-full-stack-mean-developer/blob/master/3-server-side-development-with-express/bootstrap-express-app/img/provider-added-success.PNG)
 
 ### 5 Delete a Provider (Modal)
